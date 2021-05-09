@@ -9,9 +9,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.shopcommercebackend.exception.USerNotfoundException;
 import com.shopcommercebackend.service.RoleService;
 import com.shopcommercebackend.service.UserService;
 import com.shopcommercecommon.model.Role;
@@ -63,5 +65,19 @@ public class UserController {
 		String passwordEncoded = passwordEncoder.encode(user.getPassword());
 		
 		user.setPassword(passwordEncoded);
+	}
+	
+	@GetMapping("/user/edit/{id}")
+	public String editUSer(@PathVariable("id") Integer id,Model model,RedirectAttributes redirectAttributes) {
+		try {
+			User user = userService.getOne(id);
+			List<Role> listRoles = roleService.listRoles();
+			model.addAttribute("user", user);
+            model.addAttribute("listRoles",listRoles);
+			return "user_form";
+		} catch (USerNotfoundException e) {
+			redirectAttributes.addFlashAttribute("meassge", e.getMessage());
+			return "redirect:/users";
+		}
 	}
 }
