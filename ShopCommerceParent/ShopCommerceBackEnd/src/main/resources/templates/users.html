@@ -98,9 +98,13 @@
 				 	</td>
 				 	
 				 	<td>
-				 		<a class="fas fa-user-edit" th:href="@{'/user/edit/' +${user.id}}"></a>
+				 		<a class="fas fa-user-edit" th:href="@{'/user/edit/' +${user.id}}"
+				 		title="edit user"
+				 		></a>
 				 	&nbsp; 
-				 	 	<a class="fas fa-user-minus" href=""></a>
+				 	 	<a class="fas fa-user-minus" th:href="@{'/user/delete/' + ${user.id}}"
+				 	 	title="delete user"
+				 	 	></a>
 				 	
 				 	</td>
 				 </tr>

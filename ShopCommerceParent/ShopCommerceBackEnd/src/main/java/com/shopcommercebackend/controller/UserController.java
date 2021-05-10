@@ -54,18 +54,12 @@ public class UserController {
 	@PostMapping(value = "/user/create")
 	public String createUser(User user , RedirectAttributes redirectAttributes) {
 		
-		encoderPassword(user);
 		userService.saveUser(user);
 		
 		redirectAttributes.addFlashAttribute("message", "Add a user sucessful");
 		return "redirect:/users";
 	}
 	
-	public void encoderPassword(User user) {
-		String passwordEncoded = passwordEncoder.encode(user.getPassword());
-		
-		user.setPassword(passwordEncoded);
-	}
 	
 	@GetMapping("/user/edit/{id}")
 	public String editUSer(@PathVariable("id") Integer id,Model model,RedirectAttributes redirectAttributes) {
@@ -77,6 +71,19 @@ public class UserController {
 			return "user_form";
 		} catch (USerNotfoundException e) {
 			redirectAttributes.addFlashAttribute("meassge", e.getMessage());
+			return "redirect:/users";
+		}
+	}
+	
+	@GetMapping("/user/delete/{id}")
+	public String deleteUser(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+		
+		try {
+			userService.deleteUser(id);
+			redirectAttributes.addFlashAttribute("message", "delete sucessfull");
+			return "redirect:/users";
+		} catch (USerNotfoundException e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
 			return "redirect:/users";
 		}
 	}
