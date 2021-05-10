@@ -93,8 +93,14 @@
 				 	<td> [[${user.firstName}]]</td>
 				 	<td> [[${user.lastName}]]</td>
 				 	<td> [[${user.roles}]]</td>
-				 	<td> <a th:if="${user.enabled == true }" class="fas fa-check"></a>
-				 		<a th:if="${user.enabled == false }" class="fas fa-times-circle"></a>
+				 	<td> <a th:if="${user.enabled == true }" class="fas fa-check"
+				 			th:href="@{'/user/'+${user.id} + '/enable/false'}"
+				 			title="click"
+				 	></a>
+				 		<a th:if="${user.enabled == false }" class="fas fa-times-circle"
+				 			th:href="@{'/user/'+${user.id} + '/enable/true'}"
+				 			title="click"
+				 		></a>
 				 	</td>
 				 	
 				 	<td>

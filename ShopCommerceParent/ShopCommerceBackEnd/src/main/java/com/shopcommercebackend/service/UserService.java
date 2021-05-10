@@ -3,6 +3,7 @@ package com.shopcommercebackend.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -68,5 +69,9 @@ public class UserService {
 		else {
 			userRepository.deleteById(id);
 		}
+	}
+	
+	public void updateEnable(Integer id , boolean enable) {
+		userRepository.updateEnable(id, enable);
 	}
 }

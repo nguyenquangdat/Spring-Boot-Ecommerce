@@ -75,4 +75,11 @@ public class UserTest {
 		
 		assertThat(user.getId()).isNotNull();
 	}
+	
+	//Test update Enable
+	@Test
+	public void testUpdateEnable() {
+		Integer id =1 ;
+		userRepository.updateEnable(id, false);
+	}
 }
