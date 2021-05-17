@@ -76,7 +76,21 @@
 				<th> User ID </th>
 				<th> Photo </th>
 				<th> Email </th>
-				<th> firstName </th>
+				
+				<th> <a  th:if = "${sortFiled != 'firstName'}" class="text-white"
+						th:href="@{'/users/page/' + ${currentPage} + '?sortFiled=firstName&sortDirect=' + ${sortDirect}}">   <!-- bat case khi ma chon filed khac ma chung direct  -->
+						firstName 
+						</a>
+						<a  th:if = "${sortFiled == 'firstName'}"  class="text-white"
+						th:href="@{'/users/page/' + ${currentPage} + '?sortFiled=firstName&sortDirect=' + ${reverseSortDirect}}"> <!-- bat case doi huong -_- -->
+						firstName 
+						</a>
+						
+					<span th:if = "${sortFiled == 'firstName'}"
+							th:class = "${sortDriect == 'asc' ? 'fas  fa-sort-up' : 'fas  fa-sort-down'}"
+					>
+					</span>  
+				</th>
 				<th> lastName </th>
 				<th> Roles </th>
 				<th> Enabled </th>
@@ -122,11 +136,20 @@
 </div>
 	<div>
 				<ul class="pagination justify-content-center">
-				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}"><a class="page-link" th:href="@{/users/page/1}">First</a></li>
-				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage-1}}">Previous</a></li>
-				  <li th:class="${currentPage != element ? 'page-item' : 'page-item active' }" th:each="element : ${#numbers.sequence(1,totalPage)}"><a class="page-link" th:href="@{'/users/page/' + ${element}}">[[${element}]]</a></li>
-				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item' }"><a class="page-link" th:href="@{'/users/page/' + ${currentPage+1}}">Next</a></li>
-				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item'}"><a class="page-link" th:href="@{'/users/page/' + ${totalPage}}">Last</a></li>
+				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}">
+				  <a class="page-link" th:href="@{'/users/page/1?sortFiled=' + ${sortFiled}+ '&sortDirect=' + ${sortDirect}}">First</a>
+				  </li>  
+				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}">
+				  <a class="page-link" th:href="@{'/users/page/' + ${currentPage-1}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect}}">Previous</a></li>
+				  <li th:class="${currentPage != element ? 'page-item' : 'page-item active' }" th:each="element : ${#numbers.sequence(1,totalPage)}">
+				  <a class="page-link" th:href="@{'/users/page/' + ${element}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect}}">[[${element}]]</a>
+				  </li>
+				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item' }">
+				  <a class="page-link" th:href="@{'/users/page/' + ${currentPage+1}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect}}">Next</a>
+				  </li>
+				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item'}">
+				  <a class="page-link" th:href="@{'/users/page/' + ${totalPage}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect}}">Last</a>
+				  </li>
 				</ul>
 	</div>
 </body>

@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.repository.query.Param;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.sym.Name;
 import com.shopcommercebackend.FileUploadUtil;
 import com.shopcommercebackend.exception.USerNotfoundException;
 import com.shopcommercebackend.service.RoleService;
@@ -42,20 +44,26 @@ public class UserController {
 	@GetMapping(value = "/users")
 	public String listUser(Model model ) {
 		
-		return listUser(1,model);
+		return listUser(1,model,"firstName","asc");
 	}
 	
 	@GetMapping(value = "/users/page/{Pagenumber}")
-	public String listUser(@PathVariable("Pagenumber") int pagenumber , Model model) {
+	public String listUser(@PathVariable("Pagenumber") int pagenumber , Model model, @Param("sortFiled") String sortFiled, @Param("sortDirect") String sortDirect) {
 		
-		Page<User> page = userService.getListbyPage(pagenumber);
+		Page<User> page = userService.getListbyPage(pagenumber,sortFiled,sortDirect);
 		List<User> listUsers = page.getContent();
+		String reverseSortDirect = sortDirect.equals("asc") ? "desc" : "asc";
+		System.out.println("sortFiled"+sortFiled);
+		System.out.println("sortDirect" + sortDirect);
 		
 		int currentPage = pagenumber;
 		int totalPage = page.getTotalPages();
 		model.addAttribute("currentPage",currentPage) ;// de xu ly cho nut next va previous
 		model.addAttribute("totalPage", totalPage); // xu ly nut last , duyet cac element
 		model.addAttribute("listUsers", listUsers);
+		model.addAttribute("sortFiled", sortFiled);
+		model.addAttribute("sortDirect", sortDirect);
+		model.addAttribute("reverseSortDirect",reverseSortDirect);
 		return "users";
 		
 	}	

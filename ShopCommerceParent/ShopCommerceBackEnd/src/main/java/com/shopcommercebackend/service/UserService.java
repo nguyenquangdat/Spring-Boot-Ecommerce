@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import com.shopcommercecommon.model.User;
 @Service
 public class UserService {
 	
-	public static final int PAGE_SIZE =2;
+	public static final int PAGE_SIZE =4;
 
 	@Autowired
 	UserRepository userRepository;
@@ -80,8 +81,10 @@ public class UserService {
 		userRepository.updateEnable(id, enable);
 	}
 	
-	public Page<User> getListbyPage(int PageNumber){
-		Pageable page = PageRequest.of(PageNumber-1, PAGE_SIZE);
+	public Page<User> getListbyPage(int PageNumber, String sortField, String sortDriect){
+		Sort sort = Sort.by(sortField);
+		sort = sortDriect.equals("asc") ? sort.ascending() : sort.descending();
+		Pageable page = PageRequest.of(PageNumber-1, PAGE_SIZE,sort);
 		Page<User> Listpages=userRepository.findAll(page);
 		return Listpages;
 	} 
