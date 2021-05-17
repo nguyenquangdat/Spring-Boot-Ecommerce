@@ -88,7 +88,9 @@
 			<th:bolck th:each ="user : ${listUsers}"> 
 				 <tr> 
 				 	<td> [[${user.id}]]</td>
-				 	<td> <span class="fa fa-portrait fa-4x"></span></td>
+				 	<td> <span th:if=${user.photos==null} class="fa fa-portrait fa-4x"></span>
+				 		<img th:if=${user.photos!=null} th:src="@{${user.photosImagePath}}" style="width:80px"/>
+				 	</td>
 				 	<td> [[${user.email}]]</td>
 				 	<td> [[${user.firstName}]]</td>
 				 	<td> [[${user.lastName}]]</td>
@@ -118,5 +120,14 @@
 		</tbody>	
 	</table>
 </div>
+	<div>
+				<ul class="pagination justify-content-center">
+				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}"><a class="page-link" th:href="@{/users/page/1}">First</a></li>
+				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}"><a class="page-link" th:href="@{'/users/page/' + ${currentPage-1}}">Previous</a></li>
+				  <li th:class="${currentPage != element ? 'page-item' : 'page-item active' }" th:each="element : ${#numbers.sequence(1,totalPage)}"><a class="page-link" th:href="@{'/users/page/' + ${element}}">[[${element}]]</a></li>
+				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item' }"><a class="page-link" th:href="@{'/users/page/' + ${currentPage+1}}">Next</a></li>
+				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item'}"><a class="page-link" th:href="@{'/users/page/' + ${totalPage}}">Last</a></li>
+				</ul>
+	</div>
 </body>
 </html>

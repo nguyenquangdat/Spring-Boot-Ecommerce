@@ -3,8 +3,10 @@ package com.shopcommercebackend.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import com.shopcommercecommon.model.User;
 
 @Service
 public class UserService {
+	
+	public static final int PAGE_SIZE =2;
 
 	@Autowired
 	UserRepository userRepository;
@@ -29,21 +33,22 @@ public class UserService {
 		return users;
 	}
 	
-	public void saveUser(User user) {
+	public User saveUser(User user) {
 		if(user.getId() != null) {
 			if(user.getPassword().isEmpty()) {
 				user.setPassword(userRepository.findById(user.getId()).get().getPassword());
-				userRepository.save(user);
+				
 			}
 			else {
 				 encoderPassword(user);
-			     userRepository.save(user);
+			   
 			}
 		}
 		else {
 	    encoderPassword(user);
-		userRepository.save(user);
+		
 		}
+		return userRepository.save(user);
 	}
 	
 	public User getOne(int id) throws USerNotfoundException {
@@ -74,4 +79,10 @@ public class UserService {
 	public void updateEnable(Integer id , boolean enable) {
 		userRepository.updateEnable(id, enable);
 	}
+	
+	public Page<User> getListbyPage(int PageNumber){
+		Pageable page = PageRequest.of(PageNumber-1, PAGE_SIZE);
+		Page<User> Listpages=userRepository.findAll(page);
+		return Listpages;
+	} 
 }
