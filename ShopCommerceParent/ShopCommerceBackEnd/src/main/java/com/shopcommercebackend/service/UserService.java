@@ -19,7 +19,7 @@ import com.shopcommercecommon.model.User;
 @Service
 public class UserService {
 	
-	public static final int PAGE_SIZE =4;
+	public static final int PAGE_SIZE =2;
 
 	@Autowired
 	UserRepository userRepository;
@@ -81,11 +81,20 @@ public class UserService {
 		userRepository.updateEnable(id, enable);
 	}
 	
-	public Page<User> getListbyPage(int PageNumber, String sortField, String sortDriect){
+	public Page<User> getListbyPage(int PageNumber, String sortField, String sortDriect,String keyword){
 		Sort sort = Sort.by(sortField);
 		sort = sortDriect.equals("asc") ? sort.ascending() : sort.descending();
 		Pageable page = PageRequest.of(PageNumber-1, PAGE_SIZE,sort);
-		Page<User> Listpages=userRepository.findAll(page);
-		return Listpages;
+		if(keyword == null) {
+		return userRepository.findAll(page);
+		}
+		else {
+			return userRepository.findAll(keyword, page);
+		}
+		
 	} 
+	
+
+	
+	
 }

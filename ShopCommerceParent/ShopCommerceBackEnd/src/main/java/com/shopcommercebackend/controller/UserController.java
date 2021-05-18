@@ -44,13 +44,16 @@ public class UserController {
 	@GetMapping(value = "/users")
 	public String listUser(Model model ) {
 		
-		return listUser(1,model,"firstName","asc");
+		return listUser(1,model,"firstName","asc",null);
 	}
 	
 	@GetMapping(value = "/users/page/{Pagenumber}")
-	public String listUser(@PathVariable("Pagenumber") int pagenumber , Model model, @Param("sortFiled") String sortFiled, @Param("sortDirect") String sortDirect) {
+	public String listUser(@PathVariable("Pagenumber") int pagenumber , Model model, @Param("sortFiled") String sortFiled
+			, @Param("sortDirect") String sortDirect, @Param("keyword") String keyword) {
 		
-		Page<User> page = userService.getListbyPage(pagenumber,sortFiled,sortDirect);
+		
+		Page<User> page =	userService.getListbyPage(pagenumber, sortFiled, sortDirect, keyword);
+			
 		List<User> listUsers = page.getContent();
 		String reverseSortDirect = sortDirect.equals("asc") ? "desc" : "asc";
 		System.out.println("sortFiled"+sortFiled);
@@ -58,12 +61,15 @@ public class UserController {
 		
 		int currentPage = pagenumber;
 		int totalPage = page.getTotalPages();
+		Long totalElements = page.getTotalElements();
 		model.addAttribute("currentPage",currentPage) ;// de xu ly cho nut next va previous
 		model.addAttribute("totalPage", totalPage); // xu ly nut last , duyet cac element
 		model.addAttribute("listUsers", listUsers);
 		model.addAttribute("sortFiled", sortFiled);
 		model.addAttribute("sortDirect", sortDirect);
 		model.addAttribute("reverseSortDirect",reverseSortDirect);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("totalElements", totalElements);
 		return "users";
 		
 	}	

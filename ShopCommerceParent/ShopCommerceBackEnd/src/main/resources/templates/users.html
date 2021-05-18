@@ -70,7 +70,18 @@
 	<div th:if="${message != null}" class="alert alert-success text-center">
 				[[${message}]]
 			</div>
+	
+			
+	<form	th:action=@{/users/page/1} class="form-inline" style="margin:5px 0px">
+	<input type="hidden" name="sortFiled" th:value="${sortFiled}"/>
+	<input type="hidden" name ="sortDirect" th:value="${sortDirect}"/>
+		<input type="search" required="required" name="keyword" th:value="${keyword}" class="form-control" placeholder="Enter First Name">
+	
+		<input type="submit" value="search" class = "btn btn-primary"/>
+	</form>		
+			
 	<table class="table table-bordered table-hover table-responsive-xl">
+	  
 		<thead class="table-dark">
 			<tr>
 				<th> User ID </th>
@@ -133,22 +144,26 @@
 			</th:bolck>		
 		</tbody>	
 	</table>
+
 </div>
-	<div>
+	<div th:if="${totalElements <0}">
+		<span> Not Element</span>
+	  </div>
+	<div th:if="${totalElements >0}">
 				<ul class="pagination justify-content-center">
 				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}">
-				  <a class="page-link" th:href="@{'/users/page/1?sortFiled=' + ${sortFiled}+ '&sortDirect=' + ${sortDirect}}">First</a>
+				  <a class="page-link" th:href="@{'/users/page/1?sortFiled=' + ${sortFiled}+ '&sortDirect=' + ${sortDirect} + ${keyword != null ? '&keyword=' + keyword :'' }}">First</a>
 				  </li>  
 				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}">
-				  <a class="page-link" th:href="@{'/users/page/' + ${currentPage-1}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect}}">Previous</a></li>
+				  <a class="page-link" th:href="@{'/users/page/' + ${currentPage-1}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect} + ${keyword != null ? '&keyword=' + keyword :'' }}">Previous</a></li>
 				  <li th:class="${currentPage != element ? 'page-item' : 'page-item active' }" th:each="element : ${#numbers.sequence(1,totalPage)}">
-				  <a class="page-link" th:href="@{'/users/page/' + ${element}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect}}">[[${element}]]</a>
+				  <a class="page-link" th:href="@{'/users/page/' + ${element}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect} + ${keyword != null ? '&keyword=' + keyword :'' } }">[[${element}]]</a>
 				  </li>
 				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item' }">
-				  <a class="page-link" th:href="@{'/users/page/' + ${currentPage+1}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect}}">Next</a>
+				  <a class="page-link" th:href="@{'/users/page/' + ${currentPage+1}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect} + ${keyword != null ? '&keyword=' + keyword :'' } }">Next</a>
 				  </li>
 				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item'}">
-				  <a class="page-link" th:href="@{'/users/page/' + ${totalPage}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect}}">Last</a>
+				  <a class="page-link" th:href="@{'/users/page/' + ${totalPage}+'?sortFiled='+${sortFiled}+ '&sortDirect=' + ${sortDirect} + ${keyword != null ? '&keyword=' + keyword :'' } }">Last</a>
 				  </li>
 				</ul>
 	</div>

@@ -10,6 +10,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Rollback;
 
 import com.shopcommercebackend.Repository.UserRepository;
@@ -81,5 +84,19 @@ public class UserTest {
 	public void testUpdateEnable() {
 		Integer id =1 ;
 		userRepository.updateEnable(id, false);
+	}
+	
+	@Test
+	public void TestSearch() {
+		String keyword = "a";
+		int number =0;
+		int pagesize=4;
+		Pageable page = PageRequest.of(number, pagesize);
+		
+	Page<User> pageUsers=userRepository.findAll(keyword, page);
+	
+	  List<User> user = pageUsers.getContent();
+	  user.forEach(x -> System.out.println(x));
+		
 	}
 }
