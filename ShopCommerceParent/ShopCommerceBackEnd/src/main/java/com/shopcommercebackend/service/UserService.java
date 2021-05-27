@@ -1,7 +1,13 @@
 package com.shopcommercebackend.service;
 
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,7 +15,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.csrf.InvalidCsrfTokenException;
 import org.springframework.stereotype.Service;
+import org.supercsv.io.CsvBeanWriter;
+import org.supercsv.io.ICsvBeanWriter;
+import org.supercsv.prefs.CsvPreference;
 
 import com.shopcommercebackend.Repository.UserRepository;
 import com.shopcommercebackend.exception.USerNotfoundException;
@@ -94,6 +104,41 @@ public class UserService {
 		
 	} 
 	
+	// export file CSV 
+	
+	public void exportCSV( HttpServletResponse httpServletResponse) throws IOException {
+		
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+		String time = dateFormat.format(new Date());
+		
+		String fileName="user_"+ time + ".csv";
+		// dinh nghia kieu type cho no
+		httpServletResponse.setContentType("text/csv");
+		// respone download xuong -_- 
+		String name = "Content-Disposition";	
+		//kem theo tep
+		String value  = "attachment; fileName="+fileName;
+		
+		httpServletResponse.setHeader(name, value);
+		
+		ICsvBeanWriter csvBeanWriter = new CsvBeanWriter(httpServletResponse.getWriter(), 
+				CsvPreference.STANDARD_PREFERENCE);
+		
+		String[] csvHeader = {"ID" , "Email", "First Name ", " Last Name" , "Roles", "Enables"};
+		//have to mapping with filed of entity
+		String[] fileMapping = {"id","email","firstName","lastName","roles","enabled"};
+		
+		List<User> users =userRepository.findAll();
+		//wirte the head 
+		csvBeanWriter.writeHeader(csvHeader);
+		
+		// write data into file csv
+		for(User user : users) {
+			csvBeanWriter.write(user, fileMapping);
+		}
+		
+		csvBeanWriter.close();
+	}
 
 	
 	

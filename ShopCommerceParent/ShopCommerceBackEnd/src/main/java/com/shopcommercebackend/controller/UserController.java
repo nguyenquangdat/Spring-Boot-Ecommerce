@@ -3,7 +3,7 @@ package com.shopcommercebackend.controller;
 import java.io.IOException;
 import java.util.List;
 
-
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -136,7 +136,7 @@ public class UserController {
 	}
 	
 	// update enable
-	@GetMapping(value = "user/{id}/enable/{state}")
+	@GetMapping(value = "/user/{id}/enable/{state}")
 	public String update(@PathVariable("id") Integer id , @PathVariable("state") boolean state , RedirectAttributes redirectAttributes) {
 		userService.updateEnable(id, state);
 		if(state == true) {
@@ -146,6 +146,11 @@ public class UserController {
 			redirectAttributes.addFlashAttribute("message", "changed to false");
 		}
 		return "redirect:/users";
+	}
+	
+	@GetMapping(value ="/users/exportcsv")
+	public void exportCsv(HttpServletResponse httpServletResponse) throws IOException {
+		userService.exportCSV(httpServletResponse);
 	}
 	
 }

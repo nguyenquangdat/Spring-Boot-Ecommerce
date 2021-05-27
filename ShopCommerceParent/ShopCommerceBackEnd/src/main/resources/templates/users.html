@@ -66,7 +66,13 @@
 		</nav>
 	</div>
 	
-	<h1>List Users</h1> <a th:href=@{/user/new}> Create User</a>
+	<h1>List Users</h1> 
+	<div>
+	<a th:href=@{/user/new}> Create User</a>
+	&nbsp;
+	<a th:href="@{/users/exportcsv}">Export Csv</a>
+	</div>
+	
 	<div th:if="${message != null}" class="alert alert-success text-center">
 				[[${message}]]
 			</div>
