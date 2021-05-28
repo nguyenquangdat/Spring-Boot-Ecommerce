@@ -31,7 +31,8 @@ public class WebSercurityConfigurer extends WebSecurityConfigurerAdapter{
 		.formLogin()
 			.loginPage("/login") // custom login page voi url "/login"
 			.usernameParameter("email")//cho  WebSercurityConfigurer biet email la 1 tham so chinh
-			.permitAll();
+			.permitAll()
+		.and().logout().permitAll();
 	}
 	
 	@Bean

@@ -44,7 +44,7 @@ public class ShopUserDetail implements UserDetails{
 	// trả về username đã dùng trong qúa trình xác thực
 	@Override
 	public String getUsername() {
-		return user.getPassword();
+		return user.getEmail();
 	}
 	
 	//trả về true nếu tài khoản của người dùng chưa hết hạn
@@ -71,5 +71,8 @@ public class ShopUserDetail implements UserDetails{
 		// TODO Auto-generated method stub
 		return true;
 	}
-
+	
+	public String getFullName() {
+		return user.getFirstName() + " " + user.getLastName();
+	}
 }

@@ -21,7 +21,10 @@
 	   style="max-width: 300px;margin:0 auto">
 			<div class="border bordered-secondary m-3" >
 				<div th:if=${param.error}>
-					<div class="text-danger">[[${SESSION.SPRING_SECURITY_LAST_EXCEPTION.message}]]</div>
+					<div class="text-danger">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</div>
+				</div>
+				<div th:if=${param.logout}>
+					<div>Logout sucessful</div>
 				</div>
 				<div class="p-2">
 				    <input type="email" name="email" placeholder="Email" required="required" class="form-control"/>
