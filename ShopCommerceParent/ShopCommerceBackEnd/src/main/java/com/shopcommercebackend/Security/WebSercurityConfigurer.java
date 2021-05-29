@@ -32,7 +32,11 @@ public class WebSercurityConfigurer extends WebSecurityConfigurerAdapter{
 			.loginPage("/login") // custom login page voi url "/login"
 			.usernameParameter("email")//cho  WebSercurityConfigurer biet email la 1 tham so chinh
 			.permitAll()
-		.and().logout().permitAll();
+		.and().logout().permitAll()
+		.and()
+		      .rememberMe()
+		        .key("12345678_ASDFGHJKLMNBCZ")// fix key vi khi restart lai thi no se random  1 key khac , dieu nay se khien ko the tu dong dang nhap duoc
+					.tokenValiditySeconds(7*24*60*60);
 	}
 	
 	@Bean
