@@ -141,5 +141,28 @@ public class UserService {
 	}
 
 	
+	public User getByEmail(String email) {
+		return userRepository.getUserByEmail(email);
+	}
+	
+	// update account
+	public User updateAccount(User userInForm) {
+		User userInDB =userRepository.findById(userInForm.getId()).get();
+		
+		//password 0 de trong -> thay doi password
+		if (!userInForm.getPassword().isEmpty()) {
+			userInDB.setPassword(userInForm.getPassword());
+			encoderPassword(userInDB);
+		}
+		if( userInForm.getPhotos() != null) {
+			userInDB.setPhotos(userInForm.getPhotos());
+		}
+		userInDB.setFirstName(userInForm.getFirstName());
+		userInDB.setLastName(userInForm.getLastName());
+		userInDB.setEnabled(userInForm.isEnabled());
+		
+		return userRepository.save(userInDB);
+		
+	}
 	
 }

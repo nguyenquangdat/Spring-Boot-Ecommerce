@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:replace = "fragments :: page_head('Create|Update User')"/>
+<head th:replace = "fragments :: page_head('Uppdate Account')"/>
 <body>
 <div class="container-fluid">
 	
 	<div th:replace = "navigation :: menu"></div>
+	
+	
 			
-		<form	th:action = @{/user/create} th:object=${user} method="post" style="margin: 10px; max-width: 700px"
+		<form	th:action = @{/account/update} th:object=${user} method="post" style="margin: 10px; max-width: 700px"
 		enctype="multipart/form-data"
 		>
 				<input type="hidden" th:field=*{id}>	
@@ -14,16 +16,33 @@
 		   <div class="form-inline">
 		          <label class="col-sm-4">Email :</label>
 		           <div class="col-sm-8">
-			           <input type="email" class="form-control" th:field = *{email} required="required" minlength="8" maxlength="24"/>
+			           <input type="email" class="form-control" th:field = *{email} readonly="readonly" />
 		            </div>
 	        </div>
 	        	<br/>
 	          <div class="form-inline">
 		          <label class="col-sm-4">Password :</label>
-		           <div class="col-sm-8">
-			           <input th:if="${user.id == null}" type="password" class="form-control" th:field = *{password} required="required" minlength="8" maxlength="24"/>
-			           <input th:if="${user.id != null}" type="password" class="form-control" th:field = *{password}  minlength="8" maxlength="24"/>
-		           </div>
+		         <div class="col-sm-8">
+		         	  <input type = "password" th:field="*{password}" class="form-control" 
+		           minlegth ="8" maxlength = "20"
+		           placeholder="Leave bank if you don't want to change "
+		          
+		           />
+		         </div>
+		           
+		           
+	        </div>
+	        <br/>
+	          <div class="form-inline">
+		          <label class="col-sm-4">Comfirm password :</label>
+		         <div class="col-sm-8">
+		         	  <input type = "password" id="comfirmPassword" class="form-control"
+		           minlegth ="8" maxlength = "20"
+		           oninput = "checkPasswordMatch(this)"
+		           />
+		         </div>
+		           
+		           
 	        </div>
 	        	<br/>
 	          <div class="form-inline">
@@ -41,13 +60,9 @@
 	          </div>
 	          <br/>
 	          <div class="form-inline">
-		          <label class="col-sm-4">Roles :</label>
-		           <div class="col-sm-8">
-			           <th:block th:each="role : ${listRoles}"> 
-			           	<input type="checkbox" th:field=*{roles} th:text="${role.name}" th:value="${role.id}"/>
-			           	-<small> [[${role.desciption}]]</small>
-			           	<br/>
-			           	</th:block>
+		          <label class="col-sm-4">Assigned Roles :</label>
+		           <div  class="col-sm-8">
+		           		<span>[[${user.roles}]]</span>
 		           </div>
 	          </div>
 	          <br/>
@@ -97,7 +112,7 @@
 		this.setCustomValidity("")
 		showImageThumbnail(this);
 	}
-	});	
+	});
 	
 	$("#logoutLink").on("click",function(e){
 		e.preventDefault();
@@ -105,7 +120,6 @@
 	});
 	
 	customizeDropDownMenu();
-	
 	});
 	
 	function showImageThumbnail(fileInput){
@@ -132,6 +146,15 @@
 		});
 		
 		
+	}
+	
+	function checkPasswordMatch(comfirmPassword){
+		if(comfirmPassword.value != $("#password").val()){	
+			comfirmPassword.setCustomValidity("Password don't match");
+		}
+		else {
+			comfirmPassword.setCustomValidity("");
+		}
 	}
 </script>
 </body>

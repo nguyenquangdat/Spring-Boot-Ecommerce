@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.core.sym.Name;
 import com.shopcommercebackend.FileUploadUtil;
 import com.shopcommercebackend.exception.USerNotfoundException;
 import com.shopcommercebackend.service.RoleService;
+import com.shopcommercebackend.service.ShopUserDetail;
 import com.shopcommercebackend.service.UserService;
 import com.shopcommercecommon.model.Role;
 import com.shopcommercecommon.model.User;
@@ -104,6 +106,31 @@ public class UserController {
 		userService.saveUser(user);
 		
 		redirectAttributes.addFlashAttribute("message", "Add a user sucessful");
+		return "redirect:/users";
+	}
+	
+	//update Account
+	@PostMapping(value = "/account/update")
+	public String saveDetail(User user , RedirectAttributes redirectAttributes , @RequestParam("image") MultipartFile multipartFile,
+			@AuthenticationPrincipal ShopUserDetail loggedUser) throws IOException {
+		
+	//	System.out.println(multipartFile.getOriginalFilename()); //check xem nhan name k :(
+		
+		if(! multipartFile.isEmpty()) {
+			String filename = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+			user.setPhotos(filename);
+			User user1 = userService.updateAccount(user);
+			
+			String uploadDir = "user-photos/" + user1.getId();
+			
+			FileUploadUtil.saveFile(uploadDir, filename, multipartFile);
+		}
+		
+		userService.updateAccount(user);
+		loggedUser.setFirstName(user.getFirstName());
+		loggedUser.setLastName(user.getLastName());
+		
+		redirectAttributes.addFlashAttribute("message", "Update Account Success");
 		return "redirect:/users";
 	}
 	
