@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Categories')"></head>
+<body>
+	<div class="container-fluid">
+		<div th:replace="navigation :: menu"></div>
+		<h1>List Categories</h1>
+		<div>
+			<a th:href=@{/user/new}> Create Category</a> &nbsp; <a
+				th:href="@{/users/exportcsv}">Export Csv</a>
+		</div>
+
+		<div th:if="${message != null}"
+			class="alert alert-success text-center">[[${message}]]</div>
+
+		<form th:action=@{/users/page/1} class="form-inline"
+			style="margin: 5px 0px">
+			<input type="hidden" name="sortFiled" th:value="${sortFiled}" /> <input
+				type="hidden" name="sortDirect" th:value="${sortDirect}" /> <input
+				type="search" required="required" name="keyword"
+				th:value="${keyword}" class="form-control"
+				placeholder="Enter First Name"> <input type="submit"
+				value="search" class="btn btn-primary" />
+		</form>
+		<table class="table table-bordered">
+			<thead class="table-dark">
+				<tr>
+					<th>ID</th>
+					<th>Category Image</th>
+					<th>Category Name</th>
+					<th>Alias</th>
+					<th>Enabled</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<th:block th:each="category : ${categories}">
+					<tr>
+						<td>[[${category.id}]]</td>
+						<td>[[${category.image}]]</td>
+						<td>[[${category.name}]]</td>
+						<td>[[${category.alias}]]</td>
+						<td><a th:if="${category.enabled == true }"
+							class="fas fa-check"
+							th:href="@{'/category/'+${category.id} + '/enable/false'}"
+							title="click"></a> <a th:if="${category.enabled == false }"
+							class="fas fa-times-circle"
+							th:href="@{'/category/'+${category.id} + '/enable/true'}"
+							title="click"></a></td>
+						<td><a class="fas fa-user-edit"
+							th:href="@{'/category/edit/' +${category.id}}"
+							title="edit category"></a> &nbsp; <a class="fas fa-user-minus"
+							th:href="@{'/category/delete/' + ${category.id}}"
+							title="delete category"></a></td>
+					</tr>
+				</th:block>
+			</tbody>
+		</table>
+	</div>
+</body>
+</html>
