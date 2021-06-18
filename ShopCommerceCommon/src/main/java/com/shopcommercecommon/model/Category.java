@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class Category {
@@ -41,8 +42,9 @@ public class Category {
 	
 	
 
-	public Category(String name) {
+	public Category(String name,Integer id) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.alias = name;
 		this.image = "default.png";
@@ -55,6 +57,8 @@ public class Category {
 		this.image = "default.png";
 		this.parent = category;
 	}
+	
+	
 	
 	
 
@@ -124,5 +128,10 @@ public class Category {
 		this.children = children;
 	}
 	
+	@Transient
+	public String getPhotosImagePath() {
+		if(id ==null || image == null) return "images/avatar.jpg";
+		return "/category-images/" + this.id +"/" +this.image;
+	}
 	
 }

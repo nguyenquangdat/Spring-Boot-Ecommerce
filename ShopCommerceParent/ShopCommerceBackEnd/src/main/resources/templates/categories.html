@@ -6,7 +6,7 @@
 		<div th:replace="navigation :: menu"></div>
 		<h1>List Categories</h1>
 		<div>
-			<a th:href=@{/user/new}> Create Category</a> &nbsp; <a
+			<a th:href=@{/category/new}> Create Category</a> &nbsp; <a
 				th:href="@{/users/exportcsv}">Export Csv</a>
 		</div>
 
@@ -37,7 +37,7 @@
 				<th:block th:each="category : ${categories}">
 					<tr>
 						<td>[[${category.id}]]</td>
-						<td>[[${category.image}]]</td>
+						<td><img th:if = ${category.image!=null} th:src = @{${category.photosImagePath}} /> </td>
 						<td>[[${category.name}]]</td>
 						<td>[[${category.alias}]]</td>
 						<td><a th:if="${category.enabled == true }"

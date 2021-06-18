@@ -70,7 +70,7 @@ public class CategoryTest {
 		Set<Category> childrenCategories = parent.getChildren();
 		for (Category subcategory : childrenCategories) {
 			for (int i = 0; i < newSublevel; i++) {
-				System.out.println("--");
+				System.out.print("--");
 			}
 			System.out.println(subcategory.getName());
 			
