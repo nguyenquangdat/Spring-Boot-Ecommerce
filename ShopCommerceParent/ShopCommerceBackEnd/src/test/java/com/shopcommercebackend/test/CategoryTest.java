@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 
 import com.shopcommercebackend.Repository.CategoryRepository;
@@ -23,13 +24,13 @@ public class CategoryTest {
 	@Autowired
 	CategoryRepository categoryRepository;
 
-	@Test
-	public void createRootCategory() {
-		Category category = new Category("Electronic");
-
-		Category category2 = categoryRepository.save(category);
-		assertThat(category2.getId()).isGreaterThan(0);
-	}
+//	@Test
+//	public void createRootCategory() {
+//		Category category = new Category("Electronic");
+//
+//		Category category2 = categoryRepository.save(category);
+//		assertThat(category2.getId()).isGreaterThan(0);
+//	}
 
 	@Test
 	public void testSubCategory() {
@@ -76,5 +77,32 @@ public class CategoryTest {
 			
 			printfChildrenCategory(subcategory,newSublevel);
 		}
+	}
+	
+	@Test
+	public void findRootCategory() {
+	List<Category> categories= 	categoryRepository.findRootCategory(Sort.by("name").ascending());
+		categories.forEach(x -> System.out.println(x));
+	}
+	
+	@Test
+	public void findRootCategoryByKey(){
+		List<Category> categories = categoryRepository.findRootCategoryByKeyword("c");
+		categories.forEach(x -> System.out.println(x));
+	}
+	
+	@Test
+	public void findByName() {
+		Category category = categoryRepository.findByName("Memory");
+		
+		assertThat(category.getId()).isGreaterThan(0);
+		assertThat(category.getName()).isEqualTo("Memory");
+	}
+	
+	@Test
+	public void findByAlias() {
+		Category category = categoryRepository.findByAlias("Memory");
+		assertThat(category.getId()).isGreaterThan(0);
+		assertThat(category.getAlias()).isEqualTo("Memory");
 	}
 }

@@ -1,10 +1,12 @@
 package com.shopcommercebackend.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.tomcat.util.http.fileupload.FileUpload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopcommercebackend.FileUploadUtil;
+import com.shopcommercebackend.Repository.CategoryRepository;
 import com.shopcommercebackend.service.CategoryService;
 import com.shopcommercecommon.model.Category;
 
@@ -25,9 +28,14 @@ public class CategoryController {
 	CategoryService categoryService;
 
 	@GetMapping("/categories")
-	public String listCategories(Model model) {
-		List<Category> categories = categoryService.getAllCategories();
+	public String listCategories(Model model, @Param("sortDirect") String sortDirect) {
+		if (sortDirect ==null || sortDirect.isEmpty()) {
+			sortDirect = "asc";
+		}
+		String reversesortDirect = sortDirect.equals("asc") ? "desc" : "asc";
+		List<Category> categories = categoryService.getAllCategories(sortDirect);
 		model.addAttribute("categories", categories);
+		model.addAttribute("reversesortDirect", reversesortDirect);
 		return "Categories";
 	}
 
@@ -66,6 +74,23 @@ public class CategoryController {
 			FileUploadUtil.saveFile(uploadDri, fileName, multipartFile);
 			redirectAttributes.addFlashAttribute("message", "add sucessfull");
 		return "redirect:/categories";
+	}
+	
+	@GetMapping("/category/edit/{id}")
+	public String editCategory(@PathVariable("id") Integer id, Model model) {
+		Category category = categoryService.getOneCategoy(id);
+		List<Category> categories = categoryService.getAllCategoriesForForm();
+		model.addAttribute("category", category);
+		model.addAttribute("categories",categories);
+		return "category_form";
+	}
+	
+	@GetMapping("/category/page/{numberPage}")
+	public String  getListAllCategory(@PathVariable("numberPage") Integer numberPage,
+			@Param("keyword") String keyword , Model model) {
+		List<Category> categories = new ArrayList<>();
+		
+		return "";
 	}
 
 }

@@ -8,8 +8,9 @@
 
 		<form th:action=@{/category/create} th:object=${category}
 			method="post" style="margin: 10px; max-width: 700px"
+			onsubmit="return checkUnique(this)"
 			enctype="multipart/form-data">
-		 <!-- <input type="hidden" th:field=*{id}> -->
+		  <input type="hidden" th:field=*{id}>
 			<div class="border border-secondary rounded p-3">
 
 
@@ -71,7 +72,7 @@
 			</div>
 
 		</form>
-
+		<div th:replace = "modal_fragments :: modal_dialog"></div>
 	</div>
 	<script type="text/javascript">
 	$(document).ready(function(){
@@ -128,6 +129,33 @@
 		
 		
 	}
+	
+	function checkUnique(form){
+		catId = $('#id').val();
+		catName = $('#name').val();
+		catAlias = $('#alias').val();
+		
+		csrfValue= $("input[name='_csrf']").val();
+		
+		url = "[[@{/categories/checkUnique}]]";
+		
+		params = {id : catId , name : catName, alias : catAlias, _csrf: csrfValue};
+		
+		$.post(url,params,function(response){
+			if(response == "OK"){
+				form.submit();
+			}
+			else {
+				alert(response);
+			}
+		}).fail(function(){
+			alter("falied")
+		});
+			
+		return false;
+	}
+	
+
 </script>
 </body>
 

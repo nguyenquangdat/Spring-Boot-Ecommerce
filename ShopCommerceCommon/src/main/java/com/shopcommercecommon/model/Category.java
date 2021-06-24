@@ -18,59 +18,64 @@ public class Category {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-	
-	@Column(length = 125,nullable = false, unique = true)
+
+	@Column(length = 125, nullable = false, unique = true)
 	private String name;
-	@Column(length = 125,nullable = false, unique = true)
+	@Column(length = 125, nullable = false, unique = true)
 	private String alias;
 	@Column(length = 125, nullable = false)
 	private String image;
-	
+
 	private boolean enabled;
 	@OneToOne
 	@JoinColumn(name = "parent_id")
 	private Category parent;
-	
+
 	@OneToMany(mappedBy = "parent")
 	private Set<Category> children = new HashSet<>();
-	
-	
 
 	public Category() {
 		super();
 	}
-	
-	
 
-	public Category(String name,Integer id) {
+	public Category(String name, Integer id) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.alias = name;
 		this.image = "default.png";
 	}
+	public static Category coppyFull(Category category) {
+		Category categoryCoppy = new Category();
+		categoryCoppy.setName(category.getName());
+		categoryCoppy.setId(category.getId());
+		categoryCoppy.setAlias(category.getAlias());
+		categoryCoppy.setImage(category.getImage());
+		categoryCoppy.setEnabled(category.isEnabled());
+		
+		return categoryCoppy;
+	}
 	
-	public Category(String name, Category category ) {
+	
+	public Category(Integer id, String name, String alias) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.alias = alias;
+	}
+
+	public Category(String name, Category category) {
 		super();
 		this.name = name;
 		this.alias = name;
 		this.image = "default.png";
 		this.parent = category;
 	}
-	
-	
-	
-	
-
-
-	
 
 	public Category(Integer id) {
 		super();
 		this.id = id;
 	}
-
-
 
 	public Integer getId() {
 		return id;
@@ -127,11 +132,17 @@ public class Category {
 	public void setChildren(Set<Category> children) {
 		this.children = children;
 	}
-	
+
 	@Transient
 	public String getPhotosImagePath() {
-		if(id ==null || image == null) return "images/avatar.jpg";
-		return "/category-images/" + this.id +"/" +this.image;
+		if (id == null || image == null)
+			return "images/avatar.jpg";
+		return "/category-images/" + this.id + "/" + this.image;
 	}
-	
+
+	@Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + "]";
+	}
+
 }
