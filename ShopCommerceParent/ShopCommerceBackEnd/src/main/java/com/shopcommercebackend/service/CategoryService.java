@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.shopcommercebackend.Repository.CategoryRepository;
+import com.shopcommercebackend.exception.CategoryNotFoundException;
 import com.shopcommercecommon.model.Category;
 
 @Service
@@ -161,6 +162,16 @@ public class CategoryService {
 	
 	public  Set<Category> sortedCategories(Set<Category> categories){
 		return sortedCategories(categories,"asc");
+	}
+	
+	public void deleteCategory(Integer id) throws CategoryNotFoundException {
+		Long countCategory = categoryRepository.countById(id);
+		if(countCategory == null || countCategory ==0) {
+			throw new CategoryNotFoundException("Can't find category by id : " + id);
+		}
+		else {
+			categoryRepository.deleteById(id);
+		}
 	}
 }
 

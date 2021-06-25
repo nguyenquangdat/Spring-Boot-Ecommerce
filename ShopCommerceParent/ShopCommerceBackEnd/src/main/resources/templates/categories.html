@@ -54,7 +54,9 @@
 							title="click"></a></td>
 						<td><a class="fas fa-user-edit"
 							th:href="@{'/category/edit/' +${category.id}}"
-							title="edit category"></a> &nbsp; <a class="fas fa-user-minus"
+							title="edit category"></a> &nbsp; 
+							<a th:if =${category.hasChild==false}
+							class="fas fa-user-minus"
 							th:href="@{'/category/delete/' + ${category.id}}"
 							title="delete category"></a></td>
 					</tr>

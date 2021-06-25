@@ -52,7 +52,7 @@ public class Category {
 		categoryCoppy.setAlias(category.getAlias());
 		categoryCoppy.setImage(category.getImage());
 		categoryCoppy.setEnabled(category.isEnabled());
-		
+		categoryCoppy.setHasChild(category.getChildren().size()>0);
 		return categoryCoppy;
 	}
 	
@@ -145,4 +145,14 @@ public class Category {
 		return "Category [id=" + id + ", name=" + name + "]";
 	}
 
+	@Transient
+	public Boolean hasChild;
+
+	public Boolean getHasChild() {
+		return hasChild;
+	}
+
+	public void setHasChild(Boolean hasChild) {
+		this.hasChild = hasChild;
+	}
 }

@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.shopcommercebackend.FileUploadUtil;
 import com.shopcommercebackend.Repository.CategoryRepository;
+import com.shopcommercebackend.exception.CategoryNotFoundException;
 import com.shopcommercebackend.service.CategoryService;
 import com.shopcommercecommon.model.Category;
 
@@ -71,6 +72,7 @@ public class CategoryController {
 			categoryService.saveCategory(category);
 			// de cung hang vs shoppmeBackend and fontEnd vi ca 2 cung dung
 			String uploadDri = "../category-images/"+category.getId(); 
+			FileUploadUtil.cleanFile(uploadDri);
 			FileUploadUtil.saveFile(uploadDri, fileName, multipartFile);
 			redirectAttributes.addFlashAttribute("message", "add sucessfull");
 		return "redirect:/categories";
@@ -85,12 +87,19 @@ public class CategoryController {
 		return "category_form";
 	}
 	
-	@GetMapping("/category/page/{numberPage}")
-	public String  getListAllCategory(@PathVariable("numberPage") Integer numberPage,
-			@Param("keyword") String keyword , Model model) {
-		List<Category> categories = new ArrayList<>();
+	
+	@GetMapping("/category/delete/{id}")
+	public String deleteCategory(@PathVariable("id") Integer id,RedirectAttributes redirectAttributes) {
+		try {
+			categoryService.deleteCategory(id);
+			String categoryDriect = "../category-images/"+id;
+			FileUploadUtil.deleteCategoryDriect(categoryDriect);
+			redirectAttributes.addFlashAttribute("message", "delete sucessfull");
+		} catch (CategoryNotFoundException e) {
+			redirectAttributes.addFlashAttribute("message", e.getMessage());
+		}
 		
-		return "";
+		return "redirect:/categories";
 	}
 
 }

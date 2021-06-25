@@ -31,5 +31,7 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 	
 	Category findByAlias(String alias);
 	
+	Long countById(Integer id);
+	
 	
 }
