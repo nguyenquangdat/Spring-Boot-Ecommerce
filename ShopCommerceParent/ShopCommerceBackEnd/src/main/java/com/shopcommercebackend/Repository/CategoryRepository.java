@@ -4,6 +4,8 @@ package com.shopcommercebackend.Repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -22,6 +24,9 @@ public interface CategoryRepository extends JpaRepository<Category, Integer> {
 	
 	@Query("SELECT c FROM Category c WHERE c.parent is NULL")
 	public List<Category> findRootCategory(Sort sort);
+	
+	@Query("SELECT c FROM Category c WHERE c.parent is NULL")
+	public Page<Category> findRootCategory(Pageable pageable);
 	
 	@Query("SELECT c FROM Category c WHERE c.name LIKE %:keyword% "
 			+ "AND c.parent is NULL ")

@@ -21,6 +21,7 @@ import com.shopcommercebackend.Repository.CategoryRepository;
 import com.shopcommercebackend.exception.CategoryNotFoundException;
 import com.shopcommercebackend.service.CategoryService;
 import com.shopcommercecommon.model.Category;
+import com.shopcommercecommon.model.CategoryPageInfo;
 
 @Controller
 public class CategoryController {
@@ -30,12 +31,26 @@ public class CategoryController {
 
 	@GetMapping("/categories")
 	public String listCategories(Model model, @Param("sortDirect") String sortDirect) {
+		return listByPage(1,model ,sortDirect );
+	}
+	
+	@GetMapping("/categories/page/{Pagenumber}")
+	public String listByPage(@PathVariable("Pagenumber") int pageNumber,Model model, @Param("sortDirect") String sortDirect) {
+		
 		if (sortDirect ==null || sortDirect.isEmpty()) {
 			sortDirect = "asc";
 		}
 		String reversesortDirect = sortDirect.equals("asc") ? "desc" : "asc";
-		List<Category> categories = categoryService.getAllCategories(sortDirect);
+		CategoryPageInfo categoryPageInfo = new CategoryPageInfo();
+		List<Category> categories = categoryService.getAllCategories(categoryPageInfo,pageNumber,sortDirect);
+		int totalPage = categoryPageInfo.getToltalPage();
+		Long totalElements = categoryPageInfo.getToltalElement();
+		System.out.println("aaaa"  + totalPage);
+		model.addAttribute("totalElements",totalElements);
+		model.addAttribute("totalPage",totalPage);
+		model.addAttribute("currentPage", pageNumber);
 		model.addAttribute("categories", categories);
+		model.addAttribute("sortDirect", sortDirect);
 		model.addAttribute("reversesortDirect", reversesortDirect);
 		return "Categories";
 	}
@@ -67,13 +82,18 @@ public class CategoryController {
 	public String saveCategory(Category category, @RequestParam("fileImage") MultipartFile multipartFile,
 			RedirectAttributes redirectAttributes) throws IOException {
 		
-			String fileName = multipartFile.getOriginalFilename();
-			category.setImage(fileName);
-			categoryService.saveCategory(category);
-			// de cung hang vs shoppmeBackend and fontEnd vi ca 2 cung dung
-			String uploadDri = "../category-images/"+category.getId(); 
-			FileUploadUtil.cleanFile(uploadDri);
-			FileUploadUtil.saveFile(uploadDri, fileName, multipartFile);
+		    if(!multipartFile.isEmpty()) {
+		    	String fileName = multipartFile.getOriginalFilename();
+				category.setImage(fileName);
+				Category saveCategory =categoryService.saveCategory(category);
+				// de cung hang vs shoppmeBackend and fontEnd vi ca 2 cung dung
+				String uploadDri = "../category-images/"+saveCategory.getId(); 
+				FileUploadUtil.cleanFile(uploadDri);
+				FileUploadUtil.saveFile(uploadDri, fileName, multipartFile);
+		    }
+		    else {
+		    	categoryService.saveCategory(category);
+		    }
 			redirectAttributes.addFlashAttribute("message", "add sucessfull");
 		return "redirect:/categories";
 	}

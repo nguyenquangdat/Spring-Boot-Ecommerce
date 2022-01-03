@@ -7,21 +7,27 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import javax.security.auth.message.callback.PrivateKeyCallback.Request;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.shopcommercebackend.Repository.CategoryRepository;
 import com.shopcommercebackend.exception.CategoryNotFoundException;
 import com.shopcommercecommon.model.Category;
+import com.shopcommercecommon.model.CategoryPageInfo;
 
 @Service
 public class CategoryService {
-
+    final int ROOT_PAGE_SIZE =1 ;
 	@Autowired
 	CategoryRepository categoryRepository;
 
-	public List<Category> getAllCategories(String sortDirect) {
+	public List<Category> getAllCategories(CategoryPageInfo categoryPageInfo,int numberPage , String sortDirect) {
 		Sort sort = Sort.by("name");
 		
 	    if  (sortDirect.equals("asc")) {	
@@ -29,8 +35,12 @@ public class CategoryService {
 		}else if (sortDirect.equals("desc")) {
 			sort =sort.descending();
 		}
-		
-		List<Category> rootCategory = categoryRepository.findRootCategory(sort);
+		Pageable pageable = PageRequest.of(numberPage - 1 , ROOT_PAGE_SIZE , sort);
+	    
+		Page<Category> pageCategory = categoryRepository.findRootCategory(pageable);
+		List<Category> rootCategory = pageCategory.getContent();
+		categoryPageInfo.setToltalPage(pageCategory.getTotalPages());
+		categoryPageInfo.setToltalElement(pageCategory.getTotalElements());
 		List<Category> categories = hirarchicalCategory(rootCategory,sortDirect);
 
 		return categories;

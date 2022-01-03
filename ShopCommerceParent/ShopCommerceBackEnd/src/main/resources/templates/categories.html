@@ -39,7 +39,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<th:block th:each="category : ${categories}">
+			<th:block th:each="category : ${categories}">
 					<tr>
 						<td>[[${category.id}]]</td>
 						<td><img th:if = ${category.image!=null} th:src = @{${category.photosImagePath}}  style="max-width: 100px"/> </td>
@@ -63,6 +63,27 @@
 				</th:block>
 			</tbody>
 		</table>
+	</div>
+	<div th:if="${totalElements <0}">
+		<span> Not Element</span>
+	  </div>
+	<div th:if="${totalElements >0}">
+				<ul class="pagination justify-content-center">
+				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}">
+				  <a class="page-link" th:href="@{'/categories/page/1?sortDirect=' + ${sortDirect} }">First</a>
+				  </li>  
+				  <li th:class="${currentPage ==1 ? 'page-item disabled' : 'page-item'}">
+				  <a class="page-link" th:href="@{'/categories/page/' + ${currentPage-1}+'?sortDirect=' + ${sortDirect} }">Previous</a></li>
+				  <li th:class="${currentPage != element ? 'page-item' : 'page-item active' }" th:each="element : ${#numbers.sequence(1,totalPage)}">
+				  <a class="page-link" th:href="@{'/categories/page/' + ${element} +'?sortDirect=' + ${sortDirect} } " >[[${element}]]</a>
+				  </li>
+				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item' }">
+				  <a class="page-link" th:href="@{'/categories/page/' + ${currentPage+1}+'?sortDirect=' + ${sortDirect}  }">Next</a>
+				  </li>
+				  <li th:class="${currentPage == totalPage ? 'page-item disabled' : 'page-item'}">
+				  <a class="page-link" th:href="@{'/categories/page/' + ${totalPage}+'?sortDirect=' + ${sortDirect} }">Last</a>
+				  </li>
+				</ul>
 	</div>
 </body>
 </html>

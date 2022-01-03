@@ -21,7 +21,7 @@ import com.shopcommercecommon.model.User;
 
 
 
-@DataJpaTest
+@DataJpaTest(showSql = false) // khong hien thi cau lenh sql
 @AutoConfigureTestDatabase(replace = Replace.NONE)
 @Rollback(false)
 public class UserTest {
@@ -99,4 +99,16 @@ public class UserTest {
 	  user.forEach(x -> System.out.println(x));
 		
 	}
+	
+	//Test Pageing
+	@Test
+	public void testListFirstPage() {
+		int pageSize=2;
+		int pageNumber =0;
+		Pageable pageable = PageRequest.of(pageNumber, pageSize);
+		Page page = userRepository.findAll(pageable);
+		List<User> users = page.getContent();
+		users.forEach(x -> System.out.println(x));
+		assertThat(users.size()).isEqualTo(pageSize);
+}
 }

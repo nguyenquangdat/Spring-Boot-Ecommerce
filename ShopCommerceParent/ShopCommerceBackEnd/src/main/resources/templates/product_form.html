@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+	<head th:replace="fragments :: page_head('Create|Product')" />
+	<link rel="stylesheet" th:href="@{/richtext/richtext.min.css}"/>
+	<script th:src="@{/richtext/jquery.richtext.min.js}"></script>
+</head>
+
+
+<body>
+	<div class="container-fluid ">
+
+		<div th:replace="navigation :: menu"></div>
+
+		<form th:action=@{/products/create} 
+		enctype="multipart/form-data"
+		th:object=${product} method="post" style="margin: 10px; max-width: 700px">
+			<input type="hidden" th:field=*{id}>
+			<input th:if = "${product.category != null}" type = "hidden" 
+			id ="categoryId" th:value=${product.category.id}	/>
+			<div class="border border-secondary rounded p-3">
+				<!-- Nav tabs -->
+				<ul class="nav nav-tabs" id="myTab" role="tablist">
+					<li class="nav-item">
+						<a class="nav-link active"  data-toggle="tab" href="#overview" role="tab"
+							>OverView</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link"  data-toggle="tab" href="#description" role="tab"
+							>Description</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#images" role="tab"
+							>Images</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link"  data-toggle="tab" href="#details" role="tab"
+							>Details</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link"  data-toggle="tab" href="#shipping" role="tab"
+							>Shipping</a>
+					</li>
+				</ul>
+
+				<!-- Tab panes -->
+				<div class="tab-content">
+					<div class="tab-pane active" id="overview" role="tabpanel" >
+						 <div th:replace = "/product_overview :: content"></div>
+					</div>
+					<div class="tab-pane" id="description" role="tabpanel" >
+						<div th:replace = "/product_description :: content"></div>
+					</div>
+					<div class="tab-pane" id="images" role="tabpanel" >
+						<div th:replace = "/product_images :: content"></div>
+					</div>
+						
+					<div class="tab-pane" id="details" role="tabpanel">
+						<div th:replace = "/product_detail :: content"></div>
+						<div> <input type = "button" class ="btn btn-secondary" value ="Add more Detail"
+							 onclick = "addNnextDetailSection()" /> 
+							 </div>
+					</div>
+					<div class="tab-pane" id="shipping" role="tabpanel">
+						<div th:replace = "/product_shipping :: content"></div>
+					</div>
+				</div>
+
+
+
+				<div class="text-center ">
+					<button type="submit" value="Save" class="btn btn-primary m-3">Save</button>
+					<button type="button" value="Cancel" class="btn btn-secondary" id="btnCancel">Cancel</button>
+				</div>
+			</div>
+
+		</form>
+
+
+	</div>
+	<script type="text/javascript">
+		moduleURL = "[[@{/products}]]";
+		moduleBrandURL = "[[@{/brand}]]"
+		
+		defaultImageThumbnailSrc = "[[@{/images/images.jpg}]]";
+
+	</script>
+	<script th:src = "@{/js/product_form.js}">
+	
+	</script>
+	<script th:src = "@{/js/product_form_overview.js}"> </script>
+	<script th:src = "@{/js/product_show_images.js}"> </script>
+	<script th:src = "@{/js/product_form_details.js}"> </script>
+</body>
+
+</html>

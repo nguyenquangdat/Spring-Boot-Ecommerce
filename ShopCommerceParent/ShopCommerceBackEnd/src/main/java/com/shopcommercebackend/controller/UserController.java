@@ -53,7 +53,14 @@ public class UserController {
 	public String listUser(@PathVariable("Pagenumber") int pagenumber , Model model, @Param("sortFiled") String sortFiled
 			, @Param("sortDirect") String sortDirect, @Param("keyword") String keyword) {
 		
-		
+		/*
+		 2 bien cho ma muon hien thi no chay tu dau den dau :D 
+		 Long startCount = (pagenumber -1)* UserService.PAGE_SIZE +1 
+		 Long endCount = startCount + Userservice.PageSize -1 
+		 if (endCount > page.getTotalElements(){
+		  endCount = page.getTotalEment();
+		 }
+		 * */
 		Page<User> page =	userService.getListbyPage(pagenumber, sortFiled, sortDirect, keyword);
 			
 		List<User> listUsers = page.getContent();

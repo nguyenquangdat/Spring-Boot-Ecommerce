@@ -140,10 +140,14 @@ public class Category {
 		return "/category-images/" + this.id + "/" + this.image;
 	}
 
+	
+	
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", name=" + name + "]";
+		return this.name;
 	}
+
+
 
 	@Transient
 	public Boolean hasChild;
@@ -155,4 +159,13 @@ public class Category {
 	public void setHasChild(Boolean hasChild) {
 		this.hasChild = hasChild;
 	}
+
+	public Category(String name) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.alias = name;
+		this.image = "default.png";
+	}
+	
 }

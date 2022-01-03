@@ -25,6 +25,11 @@ public class SendImageToClientConfig implements WebMvcConfigurer{
 		Path categoryPhoto = Paths.get(dirNameCategory);
 		String catgoryPhotoPath = categoryPhoto.toFile().getAbsolutePath();
 		registry.addResourceHandler("/category-images"+"/**").addResourceLocations("file:/" + catgoryPhotoPath+"/");
+		
+		String dirNameProduct= "../product-images";
+		Path ProductPhoto = Paths.get(dirNameProduct);
+		String ProductPhotoPath = ProductPhoto.toFile().getAbsolutePath();
+		registry.addResourceHandler("/product-images"+"/**").addResourceLocations("file:/" + ProductPhotoPath+"/");
 	}
 	
 

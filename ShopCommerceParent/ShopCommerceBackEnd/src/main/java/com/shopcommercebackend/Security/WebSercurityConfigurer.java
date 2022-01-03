@@ -26,7 +26,14 @@ public class WebSercurityConfigurer extends WebSecurityConfigurerAdapter{
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().anyRequest().authenticated()// se bat login , tao ra quyen try cap
+		http.authorizeRequests()
+		.antMatchers("/users/**").hasAuthority("Admin") // tao quyen truy cap
+		.antMatchers("/categories/**").hasAnyAuthority("Admin", "Editor")
+		.antMatchers("/brands/**").hasAnyAuthority("Admin", "Editor")
+		.antMatchers("/products/**").hasAnyAuthority("Admin", "Editor","Salesperson","Shipper")
+		.antMatchers("/articles/**").hasAnyAuthority("Admin", "Editor")
+		.antMatchers("/menu/**").hasAnyAuthority("Admin", "Editor")
+		.anyRequest().authenticated()// se bat login , tao ra quyen try cap
 		.and()
 		.formLogin()
 			.loginPage("/login") // custom login page voi url "/login"
@@ -50,7 +57,8 @@ public class WebSercurityConfigurer extends WebSecurityConfigurerAdapter{
 			web.ignoring().antMatchers("/images/**","/webfonts/**","/webjars/**","/js/**");
 	}
 	
-	
+	// dinh danh nguoi dung thong qua email va password (xem co ton tai tren he thong k)
+	// DaoAuthenticationProvider ket hop userDetailService va AuthenticationProvider
 	public DaoAuthenticationProvider authenticationProvider() {
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
 		daoAuthenticationProvider.setUserDetailsService(userDetailsService());
@@ -58,6 +66,7 @@ public class WebSercurityConfigurer extends WebSecurityConfigurerAdapter{
 		return daoAuthenticationProvider;
 	}
 
+	// quan ly cac authenticationProvider
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(authenticationProvider());

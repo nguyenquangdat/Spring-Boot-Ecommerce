@@ -24,13 +24,13 @@ public class CategoryTest {
 	@Autowired
 	CategoryRepository categoryRepository;
 
-//	@Test
-//	public void createRootCategory() {
-//		Category category = new Category("Electronic");
-//
-//		Category category2 = categoryRepository.save(category);
-//		assertThat(category2.getId()).isGreaterThan(0);
-//	}
+	@Test
+	public void createRootCategory() {
+		Category category = new Category("Iphone");
+
+		Category category2 = categoryRepository.save(category);
+		assertThat(category2.getId()).isGreaterThan(0);
+	}
 
 	@Test
 	public void testSubCategory() {

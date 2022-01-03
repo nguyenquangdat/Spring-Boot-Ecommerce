@@ -29,7 +29,7 @@ public class ShopUserDetail implements UserDetails{
 		 
 		 // tim grantedAuthorities 
 		 for(Role role : roles) {
-			 authorities.add(new SimpleGrantedAuthority(getUsername()));
+			 authorities.add(new SimpleGrantedAuthority(role.getName()));
 		 }
 		return authorities;
 	}

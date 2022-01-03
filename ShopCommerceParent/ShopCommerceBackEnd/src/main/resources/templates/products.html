@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace = " fragments :: page_head(Product)">
+
+
+</head>
+<body>
+<div class="container-fluid">
+	<div th:replace = "navigation :: menu"></div>
+	
+	<h1>List Product</h1> 
+	<div>
+	<a th:href=@{/products/new}> Create Product</a>
+	&nbsp;
+	<a th:href="@{/product/exportcsv}">Export Csv</a>
+	</div>
+	
+	<div th:if="${message != null}" class="alert alert-success text-center">
+				[[${message}]]
+			</div>
+	
+			
+	<form	th:action=@{/users/page/1} class="form-inline" style="margin:5px 0px">
+	<input type="hidden" name="sortFiled" th:value="${sortFiled}"/>
+	<input type="hidden" name ="sortDirect" th:value="${sortDirect}"/>
+		<input type="search" required="required" name="keyword" th:value="${keyword}" class="form-control" placeholder="Enter First Name">
+	
+		<input type="submit" value="search" class = "btn btn-primary"/>
+	</form>		
+			
+	<table class="table table-bordered table-hover table-responsive-xl">
+	  
+		<thead class="table-dark">
+				<tr>
+					<th>ID</th>
+					<th>Image</th>
+					<th>Product Name</th>
+					<th>Band </th>
+					<th>Category </th>
+					<th> Enabled</th>
+					<th> </th>
+				</tr>
+		</thead>
+		<tbody>
+		  <th:block th:each="product : ${products}">
+					<tr>
+						<td>[[${product.id}]]</td>
+						<td> 
+							<img th:src = "@{${product.mainImagePath}}" style="width: 120px" class ="img-fluid"/>
+						 </td>
+						<td>[[${product.name}]]</td>
+						<td>
+						 <th:block th:each = "brand : ${product.brand}">
+						 	[[${brand.name}]]
+						 </th:block>
+						</td>
+						<td>
+						 <th:block th:each = "cat : ${product.category}">
+						 	[[${cat.name}]]
+						 </th:block>
+						</td>
+						<td> <a th:if="${product.enabled == true }" class="fas fa-check"
+				 			th:href="@{'/product/'+${product.id} + '/enable/false'}"
+				 			title="click"
+				 	></a>
+				 		<a th:if="${product.enabled == false }" class="fas fa-times-circle"
+				 			th:href="@{'/product/'+${product.id} + '/enable/true'}"
+				 			title="click"
+				 		></a>
+				 	</td>
+						<td><a class="fas fa-user-edit"
+							th:href="@{'/product/edit/' +${product.id}}"
+							title="edit category"></a> &nbsp; 
+							<a
+							class="fas fa-user-minus"
+							th:href="@{'/product/delete/' + ${product.id}}"
+							title="delete category"></a>
+							</td>
+					</tr>
+				</th:block>
+		</tbody>
+
+	</table>
+
+</div>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		<!-- logout -->
+		$("#logoutLink").on("click",function(e){
+			e.preventDefault();
+			document.LogoutForm.submit();
+		});
+		
+		customizeDropDownMenu();
+	});
+	
+	
+	<!-- xu ly click full name redirect to controller -->
+	function customizeDropDownMenu(){
+		$(".navbar .dropdown").hover(
+				function(){
+					$(this).find('.dropdown-menu').first().stop(true, true).delay(250).slideDown();
+				},
+				function(){
+					$(this).find('.dropdown-menu').first().stop(true,true).delay(250).slideUp();
+				} 
+			);
+		
+		$(".dropdown > a").click(function(){
+			location.href = this.href;
+		});
+		
+		
+	}
+</script>
+</body>
+</html>

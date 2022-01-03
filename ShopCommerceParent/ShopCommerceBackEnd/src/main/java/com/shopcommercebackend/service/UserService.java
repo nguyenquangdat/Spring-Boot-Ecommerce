@@ -29,7 +29,7 @@ import com.shopcommercecommon.model.User;
 @Service
 public class UserService {
 	
-	public static final int PAGE_SIZE =5;
+	public static final int PAGE_SIZE =3;
 
 	@Autowired
 	UserRepository userRepository;
